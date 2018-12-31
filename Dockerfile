@@ -1,5 +1,7 @@
 FROM continuumio/anaconda3
 
+RUN apt-get update
+RUN apt-get install -y build-essential
 RUN conda install -y nltk
 RUN pip install -U tinysegmenter
 RUN git clone https://github.com/attardi/wikiextractor.git
@@ -11,6 +13,5 @@ COPY . /code
 WORKDIR /code
 
 RUN make
-RUN pip install .
 
 CMD ["/bin/bash"]
