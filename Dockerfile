@@ -10,4 +10,7 @@ RUN mkdir dataset
 COPY . /code
 WORKDIR /code
 
+RUN make
+RUN pip install .
+
 CMD ["/bin/bash"]
