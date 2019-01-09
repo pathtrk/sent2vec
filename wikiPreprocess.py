@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import nltk
 import neologdn
 import os, sys, re, glob, json
