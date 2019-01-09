@@ -8,7 +8,6 @@ RUN git clone https://github.com/attardi/wikiextractor.git
 RUN pip install -e wikiextractor
 
 RUN mkdir code
-RUN mkdir dataset
 COPY . /code
 WORKDIR /code
 
