@@ -47,10 +47,12 @@ if __name__ == '__main__':
     total = len(c)
     counter = 0
 
+    text_path = os.path.join(dataset_dir, "wikipedia-ja.txt")
+
     print("processing {} wiki files...".format(total))
     for filename in glob.iglob(dataset_path, recursive=True):
         if os.path.isfile(filename):
-            append_sentence_to_file(filename, text_path="wikipedia-ja.txt")
+            append_sentence_to_file(filename, text_path=text_path)
 
             counter += 1
             sys.stdout.flush()
