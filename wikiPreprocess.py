@@ -8,6 +8,7 @@ from tinysegmenter import *
 
 dataset_dir = "/storage/wiki_articles/" if len(sys.argv) < 2 else sys.argv[1]
 dataset_path = os.path.join(dataset_dir, '**/*')
+text_path = "/storage/sent2vec-ja-wiki.txt"
 
 
 def texts_from_wiki_json(path):
@@ -49,8 +50,6 @@ if __name__ == '__main__':
     total = len(c)
     counter = 0
 
-    text_path = os.path.join(dataset_dir, "wikipedia-ja.txt")
-
     print("processing {} wiki files...".format(total))
     for filename in glob.iglob(dataset_path, recursive=True):
         if os.path.isfile(filename):
@@ -58,5 +57,4 @@ if __name__ == '__main__':
 
             counter += 1
             sys.stdout.flush()
-            print("processed : {} / {}".format(counter, total))
-
+            sys.stdout.write("\rprocessed : {} / {}".format(counter, total))
