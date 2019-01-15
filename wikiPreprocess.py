@@ -56,5 +56,5 @@ if __name__ == '__main__':
             append_sentence_to_file(filename, text_path=text_path)
 
             counter += 1
+            print("\rprocessed : {} / {}".format(counter, total), end="")
             sys.stdout.flush()
-            sys.stdout.write("\rprocessed : {} / {}".format(counter, total))
