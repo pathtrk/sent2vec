@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM python:3-stretch
 
 RUN apt-get update && \
     apt-get install -y build-essential \
@@ -7,9 +7,9 @@ RUN apt-get update && \
                        file \
                        libmecab-dev \
                        mecab-ipadic-utf8 \
-                       python3 \
-                       python3-dev \
-                       python3-pip \
+                    #    python3 \
+                    #    python3-dev \
+                    #    python3-pip \
                        git \
                        wget \
                        curl
