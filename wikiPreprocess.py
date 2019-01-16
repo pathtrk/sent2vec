@@ -1,15 +1,5 @@
-#!/usr/bin/python3
-
-import nltk
-import neologdn
 import os, sys, re, glob, json
-from nltk.tokenize import RegexpTokenizer
-from tinysegmenter import *
-
-dataset_dir = "/storage/wiki_articles/" if len(sys.argv) < 2 else sys.argv[1]
-dataset_path = os.path.join(dataset_dir, '**/*')
-text_path = "/storage/sent2vec-ja-wiki.txt"
-
+import neologdn, nltk, MeCab
 
 def texts_from_wiki_json(path):
     texts = []
@@ -21,40 +11,47 @@ def texts_from_wiki_json(path):
     return texts
 
 def normalize_sentences(text):
-    jp_sent_tokenizer = nltk.RegexpTokenizer(u'[^ 「」!?。．）]*[!?。]')
+    jp_sent_tokenizer = nltk.RegexpTokenizer(u'[^。]*[。]')
 
-    normalized = neologdn.normalize(text).replace('\n', '')
+    normalized = neologdn.normalize(text).replace('\n', '').lower()
     sentences = jp_sent_tokenizer.tokenize(normalized)
 
     return sentences
 
-def append_sentence_to_file(json_path, text_path="/sorage/wiki_sentences.txt"):
+def tokenize_sentence(sentence):
+    segmenter = MeCab.Tagger("-Owakati")
+
+    return segmenter.parse(sentence)
+
+def tokenize_sentences(sentences):
+    return [tokenize_sentence(s) for s in sentences]
+
+def append_sentence_to_file(json_path, text_path="sentences.txt"):
     texts = texts_from_wiki_json(json_path)
 
     sentences = []
     for text in texts:
         sentences = sentences + normalize_sentences(text)
 
+    tokenized_sentences = tokenize_sentences(sentences)
+
     with open(text_path, 'a+') as plain_text:
-        for sentence in sentences:
-            plain_text.write(sentence + '\n')
+        for t in tokenized_sentences:
+            plain_text.write(t + '\n')
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     c = []
-    print("the dataset path is {}".format(dataset_path))
-
-    for filename in glob.iglob(dataset_path, recursive=True):
+    for filename in glob.iglob('/storage/wiki_articles/**/*', recursive=True):
         c.append(filename)
 
     total = len(c)
     counter = 0
 
-    print("processing {} wiki files...".format(total))
-    for filename in glob.iglob(dataset_path, recursive=True):
+    for filename in glob.iglob('/storage/wiki_articles/**/*', recursive=True):
         if os.path.isfile(filename):
-            append_sentence_to_file(filename, text_path=text_path)
+            append_sentence_to_file(filename, text_path="/storage/sent2vec-ja-wiki.txt")
 
             counter += 1
-            print("\rprocessed : {} / {}".format(counter, total), end="")
+            print("\rprocessed : {} / {}".format(counter, total))
             sys.stdout.flush()
